@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "name": "clothyou",
+  "description": null,
+  "icons": {
+    "60": "/icons-43cfe73c8d23ae9e2f329e8306a1c736/firefox_app_60x60.png",
+    "128": "/icons-43cfe73c8d23ae9e2f329e8306a1c736/firefox_app_128x128.png",
+    "512": "/icons-43cfe73c8d23ae9e2f329e8306a1c736/firefox_app_512x512.png"
+  },
+  "developer": {
+    "name": null,
+    "url": null
+  }
+}

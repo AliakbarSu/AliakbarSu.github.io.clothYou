@@ -5,6 +5,7 @@ require('dotenv').config({
 })
 
 module.exports = {
+  pathPrefix: '/AliakbarSu.github.io.clothYou',
   siteMetadata: {
     title: config.defaultTitle,
     description: config.defaultDescription,

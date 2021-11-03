@@ -1,0 +1,14 @@
+node_modules
+public
+.DS_Store
+
+
+# cache
+
+.cache
+
+
+# environment variables
+
+.env.development
+.env.production

@@ -45,7 +45,7 @@ function ProductReviews({ product }) {
         <div className="pt-4">
           {!data ? (
             'loading'
-          ) : data.reviews.aggregate.count ? (
+          ) : (
             <div className="divide-y-2 space-y-4">
               {data.reviews.edges.map(({ node: review }) => (
                 <div key={review.id} className="first:pt-0 pt-4 space-y-4">
@@ -64,11 +64,11 @@ function ProductReviews({ product }) {
                 </div>
               ))}
             </div>
-          ) : (
-            <ProductReviewForm product={product} />
           )}
         </div>
       )}
+      <h3 className="mt-6">Add Your Review</h3>
+      <ProductReviewForm product={product} />
     </div>
   )
 }

@@ -21,12 +21,14 @@ const Input = React.forwardRef(
       disabled = false,
       field,
       placeholder,
+      label,
       type = 'text'
     },
     ref
   ) => {
     return (
       <fieldset className={className}>
+        <label for={field}>{label}</label>
         <input
           id={field}
           name={field}
@@ -103,6 +105,7 @@ const Textarea = React.forwardRef(
       disabled = false,
       field,
       placeholder,
+      label,
       rows = 4,
       type = 'text'
     },
@@ -110,6 +113,7 @@ const Textarea = React.forwardRef(
   ) => {
     return (
       <fieldset className={className}>
+        <label for={field}>{label}</label>
         <textarea
           id={field}
           name={field}

@@ -54,16 +54,16 @@ function ProductReviewForm({ product }) {
 
   return (
     <Form
-      className="space-y-4"
+      className="space-y-5 mt-6"
       methods={formMethods}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Form.Input field="headline" />
+      <Form.Input field="headline" label="Title" />
       <div className="grid gap-4 md:grid-cols-2">
-        <Form.Input field="name" />
-        <Form.Input field="email" />
+        <Form.Input field="name" label="Name" />
+        <Form.Input field="email" label="Email" />
       </div>
-      <Form.Textarea field="content" />
+      <Form.Textarea field="content" label="Review" />
       <Button type="submit">Submit</Button>
     </Form>
   )

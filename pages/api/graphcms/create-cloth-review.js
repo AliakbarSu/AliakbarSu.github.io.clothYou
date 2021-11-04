@@ -1,11 +1,19 @@
 import nextConnect from 'next-connect'
 import multer from 'multer'
+import create_cloth_review_request from '@/lib/create-cloth-review'
+const path = require('path')
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination: './public/uploads',
+    destination: path.join(__dirname, 'public', 'uploads'),
     filename: (req, file, cb) => cb(null, file.originalname)
-  })
+  }),
+  limits: {
+    fieldNameSize: 500,
+    files: 5,
+    fields: 10,
+    fileSize: 200 * 1024 * 1024
+  }
 })
 
 const apiRoute = nextConnect({
@@ -21,7 +29,13 @@ const apiRoute = nextConnect({
 
 apiRoute.use(upload.array('theFiles'))
 
-apiRoute.post((req, res) => {
+apiRoute.post(async (req, res) => {
+  const customerData = {
+    name: req.body.name,
+    email: req.body.email,
+    photos: [{ id: 'ckkpd8f7c3f5y0c56m52e6mwj' }]
+  }
+  await create_cloth_review_request(customerData)
   res.status(200).json({ data: 'success' })
 })
 

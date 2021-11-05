@@ -3,10 +3,10 @@ import { FormProvider, useFormContext } from 'react-hook-form'
 
 import { ChevronDownSmallIcon } from '@/components/icons'
 
-function Form({ children, methods, onSubmit, ...props }) {
+function Form({ children, methods, onSubmit, formRef, ...props }) {
   return (
     <FormProvider {...methods}>
-      <form onSubmit={onSubmit} {...props}>
+      <form onSubmit={onSubmit} ref={formRef} {...props}>
         {children}
       </form>
     </FormProvider>
@@ -22,7 +22,8 @@ const Input = React.forwardRef(
       field,
       placeholder,
       label,
-      type = 'text'
+      type = 'text',
+      multiple
     },
     ref
   ) => {
@@ -30,6 +31,7 @@ const Input = React.forwardRef(
       <fieldset className={className}>
         <label for={field}>{label}</label>
         <input
+          multiple
           id={field}
           name={field}
           type={type}

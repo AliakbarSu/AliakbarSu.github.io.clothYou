@@ -13,10 +13,9 @@ export default async (req, res) => {
     })
     const mailObject = {
       to: email,
-      from: 'support@clothyou.co.nz',
+      from: 'aliakbar.su@gmail.com',
       subject: 'Cloth Evaluation Request',
-      text: 'Hi there, this is the amount we have valued your cloths',
-      html: `<strong>$NZD${value}</strong>`
+      html: `Hi there, this is the amount we have valued your cloths<strong>$NZD${value}</strong>`
     }
     await sendMail(mailObject)
     res.status(201).json({ coupon })

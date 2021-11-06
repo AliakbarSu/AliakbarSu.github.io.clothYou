@@ -14,7 +14,8 @@ function SendClothForm(props) {
     resolver: yupResolver(
       yup.object().shape({
         email: yup.string().required().email(),
-        name: yup.string().required()
+        name: yup.string().required(),
+        city: yup.string().required()
       })
     )
   })

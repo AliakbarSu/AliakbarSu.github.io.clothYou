@@ -33,7 +33,8 @@ apiRoute.post(async (req, res) => {
   const customerData = {
     name: req.body.name,
     email: req.body.email,
-    photos: [{ id: 'ckkpd8f7c3f5y0c56m52e6mwj' }]
+    city: req.body.city,
+    photos: []
   }
   await create_cloth_review_request(customerData)
   res.status(200).json({ data: 'success' })

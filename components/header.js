@@ -13,11 +13,6 @@ function Header({ pages = [] }) {
   const { activeCurrency } = useSettingsContext()
   const [navOpen, setNavOpen] = React.useState(false)
 
-  let pagea = [
-    ...pages,
-    { name: 'Products', id: 'sf', slug: 'test1', type: 'fsfa' },
-    { name: 'About Us', id: 'sssf', slug: 'test2', type: 'fsafa' }
-  ]
   const toggleNavHandler = () => {
     setNavOpen((navState) => !navState)
   }
@@ -55,7 +50,7 @@ function Header({ pages = [] }) {
               navOpen ? '' : 'hidden'
             ].join(' ')}
           >
-            {pagea.map((page) => (
+            {pages.map((page) => (
               <li
                 key={page.id}
                 className="block py-4 mt-1 md:inline-block md:my-0 w-6/12 md:w-3/12 text-center animate__animated animate__fadeInDown border-t-2 border-solid border-gray-100 md:border-0"

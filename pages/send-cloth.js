@@ -11,10 +11,10 @@ import useSubmissionState from 'hooks/use-form-submission'
 function SendCloth() {
   const {
     setSubmissionError,
+    setSubmissionSuccess,
     setSubmissionLoading,
-    submissionError,
     submissionLoading,
-    submissionState
+    submissionSuccess
   } = useSubmissionState()
 
   const handleClick = async (formData) => {
@@ -36,7 +36,7 @@ function SendCloth() {
         config
       )
 
-      if (res.status !== 2) {
+      if (res.status !== 200) {
         const error = new Error(
           'An error occurred while performing this request'
         )
@@ -46,8 +46,10 @@ function SendCloth() {
 
         throw error
       }
+
       setSubmissionSuccess()
     } catch (error) {
+      console.log(error)
       setSubmissionError(error.message)
     }
   }
@@ -55,8 +57,25 @@ function SendCloth() {
   return (
     <React.Fragment>
       <SEO title="Send-cloth" />
-      <h3>Submit Your Cloth For Evaluation</h3>
-      <SendClothForm onSubmit={handleClick} disabled={submissionLoading} />
+      {submissionSuccess ? (
+        <React.Fragment>
+          <div className="flex justify-center items-center flex-wrap py-32">
+            <h3 className="text-center text-gray-800 font-semibold text-lg group-hover:text-indigo-600 mb-1">
+              Thanks for submitting your cloth for review
+            </h3>
+            <br />
+            <p className="text-gray-400 text-sm">
+              Once you cloth has been valued, we'll contact you via provided
+              email
+            </p>
+          </div>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <h3>Submit Your Cloth For Evaluation</h3>
+          <SendClothForm onSubmit={handleClick} disabled={submissionLoading} />
+        </React.Fragment>
+      )}
     </React.Fragment>
   )
 }

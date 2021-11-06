@@ -34,7 +34,7 @@ function SendClothForm(props) {
         <Form.Input field="name" label="Name" />
         <Form.Input field="email" label="Email" />
       </div>
-      <Form.Input type="file" field="theFiles" multiple label="Photos" />
+      <Form.DragDrop type="file" field="theFiles" multiple label="Photos" />
       <Button type="submit" disabled={props.disabled}>
         Submit
       </Button>

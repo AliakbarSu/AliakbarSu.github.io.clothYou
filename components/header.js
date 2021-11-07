@@ -31,12 +31,14 @@ function Header({ pages = [] }) {
 
             <div className="col-span-4 row-span-1 flex items-start">
               <Link href="/">
-                <Image
-                  src="/images/logo.png"
-                  width="165"
-                  height="60"
-                  className="cursor-pointer"
-                />
+                <a>
+                  <Image
+                    src="/images/logo.png"
+                    width="165"
+                    height="60"
+                    className="cursor-pointer"
+                  />
+                </a>
               </Link>
             </div>
 

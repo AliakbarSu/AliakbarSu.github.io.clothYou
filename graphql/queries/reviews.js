@@ -15,6 +15,10 @@ const ProductReviewsQuery = gql`
           headline
           name
           rating
+          photos {
+            id
+            url
+          }
         }
       }
     }

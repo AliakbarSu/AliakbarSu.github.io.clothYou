@@ -6,6 +6,7 @@ import { ChevronDownSmallIcon } from '@/icons'
 import graphcmsClient from '@/lib/graphcms-client'
 import { ProductReviewsQuery } from '@/graphql/queries/reviews'
 import ProductReviewForm from '@/components/product-review-form'
+import ImageDisplayModal from '@/components/ui/image-display-modal'
 
 function ProductReviews({ product }) {
   const [isExpanded, setIsExpanded] = React.useState(true)
@@ -47,22 +48,29 @@ function ProductReviews({ product }) {
             'loading'
           ) : (
             <div className="divide-y-2 space-y-4">
-              {data.reviews.edges.map(({ node: review }) => (
-                <div key={review.id} className="first:pt-0 pt-4 space-y-4">
-                  <div>
-                    <p className="text-lg leading-6 font-medium text-gray-900">
-                      {review.headline}
-                    </p>
-                    <p className="text-sm leading-6 text-gray-500">
-                      {review.name} &mdash;{' '}
-                      {new Intl.DateTimeFormat('en-US', {
-                        dateStyle: 'medium'
-                      }).format(new Date(review.createdAt))}
-                    </p>
+              {data.reviews.edges.map(({ node: review }) => {
+                return (
+                  <div key={review.id} className="first:pt-0 pt-4 space-y-4">
+                    <div>
+                      <p className="text-lg leading-6 font-medium text-gray-900">
+                        {review.headline}
+                      </p>
+                      <p className="text-sm leading-6 text-gray-500">
+                        {review.name} &mdash;{' '}
+                        {new Intl.DateTimeFormat('en-US', {
+                          dateStyle: 'medium'
+                        }).format(new Date(review.createdAt))}
+                      </p>
+                      <div className="grid gird-cols-3 grid-rows-auto grid-flow-col py-3">
+                        {review.photos.map((photo) => (
+                          <ImageDisplayModal key={photo.id} {...photo} />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="leading-5 text-gray-900">{review.content}</p>
                   </div>
-                  <p className="leading-5 text-gray-900">{review.content}</p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>

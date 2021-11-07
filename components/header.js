@@ -25,13 +25,18 @@ function Header({ pages = [] }) {
             <div className="col-span-1 row-span-1 flex items-end">
               <GraphCMSSVG
                 onClick={toggleNavHandler}
-                className="h-auto text-primary w-5"
+                className="h-auto text-primary w-5 cursor-pointer"
               />
             </div>
 
             <div className="col-span-4 row-span-1 flex items-start">
               <Link href="/">
-                <Image src="/images/logo.png" width="165" height="60" />
+                <Image
+                  src="/images/logo.png"
+                  width="165"
+                  height="60"
+                  className="cursor-pointer"
+                />
               </Link>
             </div>
 

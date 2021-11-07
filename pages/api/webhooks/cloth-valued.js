@@ -14,6 +14,17 @@ export const addCouponMutation = gql`
   }
 `
 
+export const addPromoCodeMutation = gql`
+  mutation AddPromoCodeMutation($promoCode: String!, $id: ID!) {
+    clothReview: updateClothReview(
+      data: { promoCode: $promoCode }
+      where: { id: $id }
+    ) {
+      id
+    }
+  }
+`
+
 const add_coupon = async (coupon, id) => {
   return graphcmsMutationClient.request(addCouponMutation, {
     coupon,
@@ -21,18 +32,37 @@ const add_coupon = async (coupon, id) => {
   })
 }
 
+const add_promo_code = async (promoCode, id) => {
+  return graphcmsMutationClient.request(addPromoCodeMutation, {
+    promoCode,
+    id
+  })
+}
+
 export default async (req, res) => {
   const {
-    data: { id, value, email }
+    data: { id, value, email, name }
   } = req.body
   try {
+    // Create stripe coupon
     const coupon = await stripe.coupons.create({
       amount_off: convert_dollars_to_cents(value),
       currency: 'NZD',
       duration: 'once'
     })
     const couponId = coupon.id
+
+    // Create stripe promotion code
+    const promotionCode = `${name.toUpperCase()}VALUE`
+    await stripe.promotionCodes.create({
+      coupon: couponId,
+      code: promotionCode,
+      max_redemptions: 1
+    })
+
+    // Save both coupon and promo code
     await add_coupon(couponId, id)
+    await add_promo_code(promotionCode, id)
     const mailObject = {
       to: email,
       from: 'aliakbar.su@gmail.com',

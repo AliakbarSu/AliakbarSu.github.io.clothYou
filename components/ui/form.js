@@ -237,7 +237,13 @@ function FormDragDrop(props) {
         </div>
         <div className="flex flex-wrap justify-center w-full p-3">
           {images.map((img) => (
-            <img src={img} height="80" width="80" className="m-2 rounded" />
+            <img
+              src={img}
+              key={img}
+              height="80"
+              width="80"
+              className="m-2 rounded"
+            />
           ))}
         </div>
       </div>

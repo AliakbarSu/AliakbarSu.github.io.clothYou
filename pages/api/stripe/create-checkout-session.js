@@ -57,6 +57,10 @@ export default async (req, res) => {
       mode: 'payment',
       line_items,
       locale,
+      shipping_rates: ['shr_1JtJivL6WX7NfrMNsiZdrfVn'],
+      shipping_address_collection: {
+        allowed_countries: ['NZ']
+      },
       payment_method_types: ['card'],
       success_url: `${success_url}?id={CHECKOUT_SESSION_ID}`,
       ...rest

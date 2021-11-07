@@ -36,7 +36,7 @@ function Footer({ categories = [], collections = [] }) {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
         <div className="pb-8 xl:grid xl:grid-cols-5 xl:gap-8">
           <div className="grid grid-cols-2 gap-8 xl:col-span-4">
-            <div className="space-y-12 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
+            <div className="space-y-12 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
               {categories.length ? (
                 <div>
                   <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
@@ -81,6 +81,28 @@ function Footer({ categories = [], collections = [] }) {
                   </ul>
                 </div>
               ) : null}
+
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+                  More
+                </h3>
+                <ul className="mt-4 space-y-4">
+                  <li>
+                    <Link href="/about-us">
+                      <a className="text-base text-gray-500 hover:text-gray-900">
+                        About Us
+                      </a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/send-cloth">
+                      <a className="text-base text-gray-500 hover:text-gray-900">
+                        Donate Clothes
+                      </a>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="mt-12 xl:mt-0">

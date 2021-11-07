@@ -2,6 +2,7 @@ import stripe from '@/lib/stripe-client'
 import sendMail from '@/lib/send-mail'
 import graphcmsMutationClient, { gql } from '@/lib/graphcms-mutation-client'
 import { convert_dollars_to_cents } from '@/utils/currency_unit_converter'
+import voucher_codes from 'voucher-code-generator'
 
 export const addCouponMutation = gql`
   mutation AddCouponMutation($coupon: String!, $id: ID!) {
@@ -53,7 +54,12 @@ export default async (req, res) => {
     const couponId = coupon.id
 
     // Create stripe promotion code
-    const promotionCode = `${name.toUpperCase()}VALUE`
+    const promotionCode = voucher_codes.generate({
+      prefix: name.toUpperCase(),
+      length: 5,
+      charset: voucher_codes.charset('alphabetic')
+    })[0]
+
     await stripe.promotionCodes.create({
       coupon: couponId,
       code: promotionCode,

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useCart } from 'react-use-cart'
 import * as React from 'react'
+import Image from 'next/image'
 
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 import { GraphCMSSVG } from '@/svgs'
@@ -21,14 +22,20 @@ function Header({ pages = [] }) {
       <header className="max-w-7xl mx-auto bg-white flex-grow flex items-center justify-between px-4 sm:px-6">
         <div className="pt-6 w-full">
           <nav className="grid grid-cols-12">
-            <div className="col-span-3 row-span-1 flex items-center">
+            <div className="col-span-1 row-span-1 flex items-end">
               <GraphCMSSVG
                 onClick={toggleNavHandler}
                 className="h-auto text-primary w-5"
               />
             </div>
 
-            <div className="col-start-10 col-span-3 row-span-1 flex items-center justify-center">
+            <div className="col-span-4 row-span-1 flex items-start">
+              <Link href="/">
+                <Image src="/images/logo.png" width="165" height="60" />
+              </Link>
+            </div>
+
+            <div className="col-start-10 col-span-3 row-span-1 flex items-end justify-center">
               <Link href="/cart">
                 <a className="flex space-x-2">
                   <ShoppingCartIcon

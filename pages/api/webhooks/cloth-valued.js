@@ -1,6 +1,7 @@
 import stripe from '@/lib/stripe-client'
 import sendMail from '@/lib/send-mail'
 import graphcmsMutationClient, { gql } from '@/lib/graphcms-mutation-client'
+import { convert_dollars_to_cents } from '@/utils/currency_unit_converter'
 
 export const addCouponMutation = gql`
   mutation AddCouponMutation($coupon: String!, $id: ID!) {
@@ -26,7 +27,7 @@ export default async (req, res) => {
   } = req.body
   try {
     const coupon = await stripe.coupons.create({
-      amount_off: value,
+      amount_off: convert_dollars_to_cents(value),
       currency: 'NZD',
       duration: 'once'
     })

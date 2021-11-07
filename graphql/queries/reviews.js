@@ -18,6 +18,8 @@ const ProductReviewsQuery = gql`
           photos {
             id
             url
+            height
+            width
           }
         }
       }

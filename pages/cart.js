@@ -20,13 +20,8 @@ import useSubmissionState from 'hooks/use-form-submission'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 function Cart() {
-  const {
-    cartTotal,
-    isEmpty,
-    items,
-    removeItem,
-    updateItemQuantity
-  } = useCart()
+  const { cartTotal, isEmpty, items, removeItem, updateItemQuantity } =
+    useCart()
   const router = useRouter()
   const { activeCurrency } = useSettingsContext()
   const {
@@ -86,7 +81,14 @@ function Cart() {
     }
   }
 
-  if (isEmpty) return <p>Your cart is empty</p>
+  if (isEmpty)
+    return (
+      <React.Fragment>
+        <div className="flex justify-center items-center py-32">
+          <p>Your cart is empty</p>
+        </div>
+      </React.Fragment>
+    )
 
   return (
     <React.Fragment>

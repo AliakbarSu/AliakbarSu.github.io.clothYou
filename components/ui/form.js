@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { FormProvider, useFormContext } from 'react-hook-form'
-
+import Image from 'next/image'
 import { ChevronDownSmallIcon } from '@/components/icons'
 
 function Form({ children, methods, onSubmit, formRef, ...props }) {
@@ -23,7 +23,8 @@ const Input = React.forwardRef(
       placeholder,
       label,
       type = 'text',
-      multiple
+      multiple,
+      onChange
     },
     ref
   ) => {
@@ -31,7 +32,8 @@ const Input = React.forwardRef(
       <fieldset className={className}>
         <label htmlFor={field}>{label}</label>
         <input
-          multiple
+          onChange={onChange}
+          multiple={multiple}
           id={field}
           name={field}
           type={type}
@@ -180,12 +182,21 @@ function FormTextarea(props) {
 
 function FormDragDrop(props) {
   const { errors, register } = useFormContext()
+  const [images, setImages] = React.useState([])
+
+  const onFileSelectedHandler = (event) => {
+    const files = []
+    for (let file of event.target.files) {
+      files.push(URL.createObjectURL(file))
+    }
+    setImages(files)
+  }
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700">
         {props.label}
       </label>
-      <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+      <div className="mt-1 flex flex-wrap justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
         <div className="space-y-1 text-center">
           <svg
             className="mx-auto h-12 w-12 text-gray-400"
@@ -207,7 +218,12 @@ function FormDragDrop(props) {
               className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
             >
               <span>Upload a file</span>
-              <Input ref={register} className="sr-only" {...props}>
+              <Input
+                ref={register}
+                className="sr-only"
+                onChange={onFileSelectedHandler}
+                {...props}
+              >
                 {errors?.[props.field] ? (
                   <p className="mt-2 text-red-700 text-sm">
                     {errors[props.field].message}
@@ -218,6 +234,11 @@ function FormDragDrop(props) {
             <p className="pl-1">or drag and drop</p>
           </div>
           <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+        </div>
+        <div className="flex flex-wrap justify-center w-full p-3">
+          {images.map((img) => (
+            <img src={img} height="80" width="80" className="m-2 rounded" />
+          ))}
         </div>
       </div>
     </div>

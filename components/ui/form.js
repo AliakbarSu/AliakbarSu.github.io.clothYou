@@ -29,7 +29,7 @@ const Input = React.forwardRef(
   ) => {
     return (
       <fieldset className={className}>
-        <label for={field}>{label}</label>
+        <label htmlFor={field}>{label}</label>
         <input
           multiple
           id={field}
@@ -115,7 +115,7 @@ const Textarea = React.forwardRef(
   ) => {
     return (
       <fieldset className={className}>
-        <label for={field}>{label}</label>
+        <label htmlFor={field}>{label}</label>
         <textarea
           id={field}
           name={field}
@@ -203,7 +203,7 @@ function FormDragDrop(props) {
           </svg>
           <div className="flex text-sm text-gray-600">
             <label
-              for={props.field}
+              htmlFor={props.field}
               className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
             >
               <span>Upload a file</span>

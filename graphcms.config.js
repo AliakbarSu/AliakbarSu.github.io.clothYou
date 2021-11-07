@@ -10,9 +10,6 @@ module.exports = {
     {
       code: 'NZD',
       default: true
-    },
-    {
-      code: 'NZD'
     }
   ]
 }

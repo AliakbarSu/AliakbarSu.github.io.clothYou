@@ -8,6 +8,7 @@ import { ChevronDownSmallIcon } from '@/icons'
 import { formatCurrencyValue } from '@/utils/format-currency-value'
 import ProductReviews from '@/components/product-reviews'
 import { useSettingsContext } from '@/context/settings'
+import ProductImagesUi from '@/components/product-images-ui'
 
 function ProductPageUI({ product }) {
   const { addItem } = useCart()
@@ -17,6 +18,10 @@ function ProductPageUI({ product }) {
   const [activeVariantId, setActiveVariantId] = React.useState(
     router.query.variantId || product.variants[0].id
   )
+
+  const [primaryImage] = product.images
+
+  const [activeImage, setActiveImage] = React.useState(primaryImage)
 
   React.useEffect(() => {
     const url = `/products/${product.slug}?variant=${activeVariantId}`
@@ -30,8 +35,6 @@ function ProductPageUI({ product }) {
   const updateQuantity = (event) =>
     setVariantQuantity(Number(event.target.value))
   const updateVariant = (event) => setActiveVariantId(event.target.value)
-
-  const [primaryImage] = product.images
 
   const addToCart = () => {
     const itemMetadata = router.locales.reduce(
@@ -58,16 +61,27 @@ function ProductPageUI({ product }) {
     )
   }
 
+  const switchActiveImageHandler = (image) => {
+    setActiveImage(image)
+  }
+
   return (
     <div className="lg:flex -mx-6">
       <div className="mb-8 px-6 md:mb-0 lg:w-1/2">
         <div className="w-full overflow-hidden relative bg-gainsboro rounded-lg">
           <Image
-            src={primaryImage.url}
-            height={primaryImage.height}
-            width={primaryImage.width}
+            src={activeImage.url}
+            height={activeImage.height}
+            width={activeImage.width}
             alt={product.name}
             title={product.name}
+          />
+        </div>
+        <div>
+          <ProductImagesUi
+            onClick={switchActiveImageHandler}
+            {...product}
+            activeImage={activeImage}
           />
         </div>
       </div>

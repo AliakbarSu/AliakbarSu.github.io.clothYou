@@ -62,6 +62,7 @@ export default async (req, res) => {
         allowed_countries: ['NZ']
       },
       payment_method_types: ['card'],
+      allow_promotion_codes: true,
       success_url: `${success_url}?id={CHECKOUT_SESSION_ID}`,
       ...rest
     })

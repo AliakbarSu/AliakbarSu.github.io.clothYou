@@ -1,5 +1,24 @@
 import stripe from '@/lib/stripe-client'
 import sendMail from '@/lib/send-mail'
+import graphcmsMutationClient, { gql } from '@/lib/graphcms-mutation-client'
+
+export const addCouponMutation = gql`
+  mutation AddCouponMutation($coupon: String!, $id: ID!) {
+    clothReview: updateClothReview(
+      data: { coupon: $coupon }
+      where: { id: $id }
+    ) {
+      id
+    }
+  }
+`
+
+const add_coupon = async (coupon, id) => {
+  return graphcmsMutationClient.request(addCouponMutation, {
+    coupon,
+    id
+  })
+}
 
 export default async (req, res) => {
   const {
@@ -11,6 +30,8 @@ export default async (req, res) => {
       currency: 'NZD',
       duration: 'once'
     })
+    const couponId = coupon.id
+    await add_coupon(couponId, id)
     const mailObject = {
       to: email,
       from: 'aliakbar.su@gmail.com',
@@ -20,7 +41,7 @@ export default async (req, res) => {
     await sendMail(mailObject)
     res.status(201).json({ coupon })
   } catch (err) {
-    console.error(error)
+    console.error(err)
     res.status(500).json({
       message: 'There was a problem creating a coupon'
     })

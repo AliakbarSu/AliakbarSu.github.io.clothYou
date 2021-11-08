@@ -8,15 +8,18 @@ import { GraphCMSSVG } from '@/svgs'
 import { ShoppingCartIcon } from '@/icons'
 import { useSettingsContext } from '@/context/settings'
 import 'animate.css'
+import { useModalContext } from '@/context/modal'
 
 function Header({ pages = [] }) {
   const { cartTotal } = useCart()
   const { activeCurrency } = useSettingsContext()
   const [navOpen, setNavOpen] = React.useState(false)
+  const { setModalState } = useModalContext()
 
   const toggleNavHandler = () => {
     setNavOpen((navState) => !navState)
   }
+
   return (
     <React.Fragment>
       <header className="max-w-7xl mx-auto bg-white flex-grow flex items-center justify-between px-4 sm:px-6">
@@ -33,21 +36,32 @@ function Header({ pages = [] }) {
               <Link href="/">
                 <a>
                   <Image
-                    src="/images/logo.png"
-                    width="165"
-                    height="60"
+                    src="/images/Final-Logo.png"
+                    width="130"
+                    height="50"
                     className="cursor-pointer"
                   />
                 </a>
               </Link>
             </div>
-
+            <div className="col-start-6 md:col-start-7 col-span-3 row-span-1 flex items-end justify-end">
+              <p className="sr-only">Search</p>
+              <Image
+                onClick={() => setModalState(true)}
+                src="/images/Search-icon.png"
+                width="25"
+                height="22"
+                className="cursor-pointer"
+              />
+            </div>
             <div className="col-start-10 col-span-3 row-span-1 flex items-end justify-center">
               <Link href="/cart">
                 <a className="flex space-x-2">
-                  <ShoppingCartIcon
-                    className="h-6 w-6 text-gray-400"
-                    aria-hidden="true"
+                  <Image
+                    src="/images/Cart-Icon.png"
+                    width="20"
+                    height="22"
+                    className="cursor-pointer"
                   />
                   <span className="text-gray-900">
                     {formatCurrencyValue({

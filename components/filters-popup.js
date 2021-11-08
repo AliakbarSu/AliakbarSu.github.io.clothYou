@@ -11,12 +11,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function FiltersPopup(props) {
-  const [selectedColor, setSelectedColor] = useState({})
-  const [selectedSize, setSelectedSize] = useState({})
-  const [selectedPriceRange, setSelectedPriceRange] = useState({
+export default function FiltersPopup({ show, onClose, onApply }) {
+  const [selectedColors, setSelectedColors] = useState([])
+  const [selectedSizes, setSelectedSizes] = useState([])
+  const [price, setPrice] = useState({
     min: 0,
-    max: 1
+    max: 0
   })
   const { activeCurrency } = useSettingsContext()
   const [productVariants, setProductVariants] = useState({
@@ -24,6 +24,12 @@ export default function FiltersPopup(props) {
     sizes: [],
     prices: [100, 100, 100, 1000]
   })
+
+  const remove_dublicates_variants = (array) => {
+    return array.filter((item, pos) => {
+      return array.map(({ name }) => name).indexOf(item.name) == pos
+    })
+  }
 
   useEffect(async () => {
     const { productColorVariants, productSizeVariants, products } =
@@ -33,31 +39,72 @@ export default function FiltersPopup(props) {
     const priceMin = productPrices[0]
     const priceMax = productPrices[productPrices.length - 1]
     setProductVariants({
-      colors: productColorVariants,
-      sizes: productSizeVariants,
+      colors: remove_dublicates_variants(productColorVariants),
+      sizes: remove_dublicates_variants(productSizeVariants),
       prices: create_price_range(priceMin, priceMax, 1000)
     })
   }, [])
 
-  const onMinPriceHandler = (minPrice) => {
-    setSelectedPriceRange((state) => ({ ...state, min: minPrice }))
+  const setMinPrice = (minPrice) => {
+    setPrice((state) => ({ ...state, min: minPrice }))
   }
 
-  const onMaxPriceHandler = (maxPrice) => {
-    setSelectedPriceRange((state) => ({ ...state, max: maxPrice }))
+  const setMaxPrice = (maxPrice) => {
+    setPrice((state) => ({ ...state, max: maxPrice }))
+  }
+
+  const isItemInArray = (item, selections) => {
+    return selections.find((sItem) => sItem.toUpperCase() == item.toUpperCase())
+  }
+
+  const selectColor = (color) => {
+    const itemAlreadyExists = isItemInArray(color, selectedColors)
+    if (itemAlreadyExists) {
+      setSelectedColors((state) =>
+        state.filter((cl) => cl.toUpperCase() !== color.toUpperCase())
+      )
+    } else {
+      setSelectedColors((state) => [...state, color])
+    }
+  }
+
+  const selectSize = (size) => {
+    const itemAlreadyExists = isItemInArray(size, selectedSizes)
+    if (itemAlreadyExists) {
+      setSelectedSizes((state) =>
+        state.filter((cl) => cl.toUpperCase() !== size.toUpperCase())
+      )
+    } else {
+      setSelectedSizes((state) => [...state, size])
+    }
   }
 
   const onSubmitHandler = (event) => {
     event.preventDefault()
-    props.onApply({ selectedColor, selectedSize, selectedPriceRange })
+    onApply({
+      color: selectedColors,
+      size: selectedSizes,
+      price: price
+    })
+  }
+
+  const onClearFiltersHandler = (event) => {
+    setSelectedSizes([])
+    setSelectedColors([])
+    setPrice({ min: 0, max: 0 })
+    onApply({
+      color: [],
+      size: [],
+      price: { min: 0, max: 0 }
+    })
   }
 
   return (
-    <Transition.Root show={true} as={Fragment}>
+    <Transition.Root show={show} as={Fragment}>
       <Dialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
-        onClose={props.onClose}
+        onClose={onClose}
       >
         <div
           className="flex min-h-screen text-center md:block md:px-2 lg:px-4"
@@ -96,7 +143,7 @@ export default function FiltersPopup(props) {
                 <button
                   type="button"
                   className="absolute top-4 right-4 text-gray-400 hover:text-gray-500 sm:top-8 sm:right-6 md:top-6 md:right-6 lg:top-8 lg:right-8"
-                  onClick={props.onClose}
+                  onClick={onClose}
                 >
                   <span className="sr-only">Close</span>
                   <XIcon className="h-6 w-6" aria-hidden="true" />
@@ -120,13 +167,14 @@ export default function FiltersPopup(props) {
                               Min Price
                             </h2>
                             <DropdownSelector
-                              options={productVariants.prices.map((pr) =>
-                                formatCurrencyValue({
+                              options={productVariants.prices.map((pr) => ({
+                                display: formatCurrencyValue({
                                   currency: activeCurrency,
                                   value: pr
-                                })
-                              )}
-                              onSelect={onMinPriceHandler}
+                                }),
+                                value: pr
+                              }))}
+                              onSelect={setMinPrice}
                             />
                           </div>
                           <div className="w-5/12">
@@ -134,13 +182,14 @@ export default function FiltersPopup(props) {
                               Max Price
                             </h2>
                             <DropdownSelector
-                              options={productVariants.prices.map((pr) =>
-                                formatCurrencyValue({
+                              options={productVariants.prices.map((pr) => ({
+                                display: formatCurrencyValue({
                                   currency: activeCurrency,
                                   value: pr
-                                })
-                              )}
-                              onSelect={onMaxPriceHandler}
+                                }),
+                                value: pr
+                              }))}
+                              onSelect={setMaxPrice}
                             />
                           </div>
                         </div>
@@ -150,8 +199,8 @@ export default function FiltersPopup(props) {
                           </h4>
 
                           <RadioGroup
-                            value={selectedColor}
-                            onChange={setSelectedColor}
+                            // value={selectedColor}
+                            onChange={selectColor}
                             className="mt-4"
                           >
                             <RadioGroup.Label className="sr-only">
@@ -162,17 +211,17 @@ export default function FiltersPopup(props) {
                                 <RadioGroup.Option
                                   key={color.id}
                                   value={color.name}
-                                  className={({ active, checked }) =>
-                                    classNames(
-                                      `bg-${color.color.toLowerCase()}-500`,
-                                      `bg-${color.color.toLowerCase()}`,
-                                      active && checked
-                                        ? 'ring ring-offset-1'
-                                        : '',
-                                      !active && checked ? 'ring-2' : '',
-                                      '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                                    )
-                                  }
+                                  className={classNames(
+                                    `bg-${color.color.toLowerCase()}-500`,
+                                    `bg-${color.color.toLowerCase()}`,
+                                    isItemInArray(color.name, selectedColors)
+                                      ? 'ring ring-offset-2'
+                                      : '',
+                                    !isItemInArray(color.name, selectedColors)
+                                      ? 'ring-1'
+                                      : '',
+                                    '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                                  )}
                                 >
                                   <RadioGroup.Label as="p" className="sr-only">
                                     {color.name}
@@ -206,8 +255,8 @@ export default function FiltersPopup(props) {
                           </div> */}
 
                           <RadioGroup
-                            value={selectedSize}
-                            onChange={setSelectedSize}
+                            // value={selectedSizes}
+                            onChange={selectSize}
                             className="mt-4"
                           >
                             <RadioGroup.Label className="sr-only">
@@ -218,15 +267,15 @@ export default function FiltersPopup(props) {
                                 <RadioGroup.Option
                                   key={size.id}
                                   value={size.name}
-                                  className={({ active }) =>
-                                    classNames(
-                                      'bg-white shadow-sm text-gray-900 cursor-pointer',
-                                      active ? 'ring-2 ring-indigo-500' : '',
-                                      'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
-                                    )
-                                  }
+                                  className={classNames(
+                                    'bg-white shadow-sm text-gray-900 cursor-pointer',
+                                    isItemInArray(size.name, selectedSizes)
+                                      ? 'ring-2 ring-indigo-500'
+                                      : '',
+                                    'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                  )}
                                 >
-                                  {({ active, checked }) => (
+                                  {({ checked }) => (
                                     <>
                                       <RadioGroup.Label as="p">
                                         {size.name}
@@ -234,7 +283,12 @@ export default function FiltersPopup(props) {
 
                                       <div
                                         className={classNames(
-                                          active ? 'border' : 'border-2',
+                                          isItemInArray(
+                                            size.name,
+                                            selectedSizes
+                                          )
+                                            ? 'border'
+                                            : 'border-2',
                                           checked
                                             ? 'border-indigo-500'
                                             : 'border-transparent',
@@ -255,6 +309,13 @@ export default function FiltersPopup(props) {
                           className="mt-6 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                           Apply Filters
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onClearFiltersHandler}
+                          className="mt-6 w-full border-indigo-600 bg-white text-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium hover:text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Clear Filters
                         </button>
                       </form>
                     </section>

@@ -15,7 +15,7 @@ export default function DropdownSelector({ options, onSelect }) {
       value={selected}
       onChange={(value) => {
         setSelected(value)
-        onSelect(value)
+        onSelect(value.value)
       }}
     >
       {({ open }) => (
@@ -23,7 +23,7 @@ export default function DropdownSelector({ options, onSelect }) {
           <div className="mt-1 relative">
             <Listbox.Button className="relative w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="flex items-center">
-                <span className="ml-3 block truncate">{selected}</span>
+                <span className="ml-3 block truncate">{selected.display}</span>
               </span>
               <span className="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
@@ -43,7 +43,7 @@ export default function DropdownSelector({ options, onSelect }) {
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 {options.map((option) => (
                   <Listbox.Option
-                    key={option}
+                    key={option.value}
                     className={({ active }) =>
                       classNames(
                         active ? 'text-white bg-indigo-600' : 'text-gray-900',
@@ -61,7 +61,7 @@ export default function DropdownSelector({ options, onSelect }) {
                               'ml-3 block truncate'
                             )}
                           >
-                            {option}
+                            {option.display}
                           </span>
                         </div>
 

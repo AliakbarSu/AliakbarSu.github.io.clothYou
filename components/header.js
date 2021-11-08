@@ -44,17 +44,21 @@ function Header({ pages = [] }) {
                 </a>
               </Link>
             </div>
-            <div className="col-start-6 md:col-start-7 col-span-3 row-span-1 flex items-end justify-end">
-              <p className="sr-only">Search</p>
-              <Image
-                onClick={() => setModalState(true)}
-                src="/images/Search-icon.png"
-                width="25"
-                height="22"
-                className="cursor-pointer"
-              />
+            <div className="col-start-8 md:col-start-8 col-span-3 row-span-1 flex items-end justify-end">
+              <Link href="/">
+                <a className="flex items-end justify-end">
+                  <p className="sr-only">Search</p>
+                  <Image
+                    onClick={() => setModalState(true)}
+                    src="/images/Search-icon.png"
+                    width="25"
+                    height="22"
+                    className="cursor-pointer"
+                  />
+                </a>
+              </Link>
             </div>
-            <div className="col-start-10 col-span-3 row-span-1 flex items-end justify-center">
+            <div className="col-start-11 col-span-2 row-span-1 flex items-end justify-center">
               <Link href="/cart">
                 <a className="flex space-x-2">
                   <Image
@@ -63,12 +67,12 @@ function Header({ pages = [] }) {
                     height="22"
                     className="cursor-pointer"
                   />
-                  <span className="text-gray-900">
+                  {/* <span className="text-gray-900">
                     {formatCurrencyValue({
                       currency: activeCurrency,
                       value: cartTotal
                     })}
-                  </span>
+                  </span> */}
                 </a>
               </Link>
             </div>

@@ -2,11 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 import { formatCurrencyValue } from '@/utils/format-currency-value'
-import { useSettingsContext } from '@/context/settings'
 
-function ProductCard({ id, images, name, price, slug }) {
-  const { activeCurrency } = useSettingsContext()
-
+function ProductCard({ id, images, name, price, slug, activeCurrency }) {
   const [primaryImage] = images
 
   return (

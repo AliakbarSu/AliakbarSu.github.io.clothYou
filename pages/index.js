@@ -7,6 +7,7 @@ import { useModalContext } from '@/context/modal'
 import Pagination from '@/components/ui/pagination'
 
 function IndexPage({ products }) {
+  const ITEMS_PER_PAGE = 25
   const split_products_into_pages = (allProducts, itemsPerPage) => {
     let ch = 0
     return allProducts.reduce(
@@ -26,7 +27,7 @@ function IndexPage({ products }) {
   const { modalState, setModalState } = useModalContext()
   const [activePage, setActivePage] = React.useState(0)
   const [filteredProducts, setFilteredProducts] = React.useState(
-    split_products_into_pages([...products], 2)
+    split_products_into_pages([...products], ITEMS_PER_PAGE)
   )
 
   const is_color_in_colors = (color, colors) => {
@@ -69,7 +70,9 @@ function IndexPage({ products }) {
       return colorCondition && sizeCondition && priceCondition
     })
 
-    setFilteredProducts(split_products_into_pages(updatedProducts, 2))
+    setFilteredProducts(
+      split_products_into_pages(updatedProducts, ITEMS_PER_PAGE)
+    )
   }
 
   return (

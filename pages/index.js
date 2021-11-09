@@ -4,10 +4,30 @@ import getPageData from '@/lib/get-page-data'
 import ProductGrid from '@/components/product-grid'
 import FiltersPopup from '@/components/filters-popup'
 import { useModalContext } from '@/context/modal'
+import Pagination from '@/components/ui/pagination'
 
 function IndexPage({ products }) {
-  const [filteredProducts, setFilteredProducts] = React.useState([...products])
+  const split_products_into_pages = (allProducts, itemsPerPage) => {
+    let ch = 0
+    return allProducts.reduce(
+      (all, one) => {
+        if (all[ch].length > itemsPerPage - 1) {
+          ch++
+          all[ch] = [].concat([], one)
+        } else {
+          all[ch] = [].concat(all[ch], one)
+        }
+        return all
+      },
+      [[]]
+    )
+  }
+
   const { modalState, setModalState } = useModalContext()
+  const [activePage, setActivePage] = React.useState(0)
+  const [filteredProducts, setFilteredProducts] = React.useState(
+    split_products_into_pages([...products], 2)
+  )
 
   const is_color_in_colors = (color, colors) => {
     const updatedColor = color.map((s) => s.toUpperCase())
@@ -32,6 +52,10 @@ function IndexPage({ products }) {
     return price >= min && price <= max
   }
 
+  const is_page_active = (index) => {
+    return index == activePage
+  }
+
   const onFiltersApplyHandler = ({ color, size, price: { min, max } }) => {
     const colorsInFilters = color
     const sizesInFilters = size
@@ -45,7 +69,7 @@ function IndexPage({ products }) {
       return colorCondition && sizeCondition && priceCondition
     })
 
-    setFilteredProducts(updatedProducts)
+    setFilteredProducts(split_products_into_pages(updatedProducts, 2))
   }
 
   return (
@@ -55,18 +79,30 @@ function IndexPage({ products }) {
         onClose={() => setModalState(false)}
         onApply={onFiltersApplyHandler}
       />
-
-      <ProductGrid products={filteredProducts} />
+      {filteredProducts.map((prods, page) => (
+        <ProductGrid
+          className={is_page_active(page) ? '' : 'sr-only'}
+          key={page}
+          products={prods}
+        />
+      ))}
+      <div className="mt-8">
+        <Pagination
+          pages={filteredProducts}
+          onSwithPage={setActivePage}
+          activePage={activePage}
+        />
+      </div>
     </React.Fragment>
   )
 }
 
 export async function getStaticProps({ locale }) {
   const pageData = await getPageData({ locale })
-  const { products } = await getAllProducts({ locale })
+  const { products, pageInfo } = await getAllProducts({ locale, limit: 100 })
 
   return {
-    props: { ...pageData, products }
+    props: { ...pageData, products, pageInfo }
   }
 }
 

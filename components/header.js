@@ -23,20 +23,20 @@ function Header({ pages = [] }) {
   return (
     <React.Fragment>
       <header className="max-w-7xl mx-auto bg-white flex-grow flex items-center justify-between px-4 sm:px-6">
-        <div className="pt-6 w-full">
+        <div className="pt-4 w-full">
           <nav className="grid grid-cols-12">
-            <div className="col-span-1 row-span-1 flex items-end">
+            <div className="col-span-1 pt-2 row-span-1 flex items-center">
               <GraphCMSSVG
                 onClick={toggleNavHandler}
                 className="h-auto text-primary w-5 cursor-pointer"
               />
             </div>
 
-            <div className="col-span-4 row-span-1 flex items-start">
+            <div className="col-span-6 row-span-1 flex items-center">
               <Link href="/">
                 <a>
                   <Image
-                    src="/images/Final-Logo.png"
+                    src="/images/Logo.png"
                     width="130"
                     height="50"
                     className="cursor-pointer"
@@ -44,27 +44,25 @@ function Header({ pages = [] }) {
                 </a>
               </Link>
             </div>
-            <div className="col-start-8 md:col-start-8 col-span-3 row-span-1 flex items-end justify-end">
+            <div className="col-start-8 md:col-start-8 col-span-5 md:col-span-4 row-span-1 flex items-center justify-end">
               <Link href="/">
-                <a className="flex items-end justify-end">
+                <a className="flex pt-1 mr-2 md:mr-6 items-end justify-end">
                   <p className="sr-only">Search</p>
                   <Image
                     onClick={() => setModalState(true)}
                     src="/images/Search-icon.png"
                     width="25"
-                    height="22"
+                    height="25"
                     className="cursor-pointer"
                   />
                 </a>
               </Link>
-            </div>
-            <div className="col-start-11 col-span-2 row-span-1 flex items-end justify-center">
               <Link href="/cart">
                 <a className="flex space-x-2">
                   <Image
                     src="/images/Cart-Icon.png"
-                    width="20"
-                    height="22"
+                    width="25"
+                    height="25"
                     className="cursor-pointer"
                   />
                   {/* <span className="text-gray-900">
